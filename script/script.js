@@ -6,7 +6,6 @@ async function fetchPlaylist() {
     const artistCount = {};
     let index = 1;
 
-    // Nouveau genreMap avec les genres mis à jour
     const genreMap = {
         "Djo": "Rock",
         "Dorado Schmitt": "Jazz",
@@ -24,7 +23,7 @@ async function fetchPlaylist() {
         "Hozier": "Folk"
     };
 
-    const artists = Object.keys(genreMap); // Utilisation des clés du genreMap
+    const artists = Object.keys(genreMap); 
     const genreCount = {};
 
     // Comptabilisation des genres
@@ -34,15 +33,15 @@ async function fetchPlaylist() {
     });
 
     // Création du graphique pour les genres musicaux
-    const labels = Object.keys(genreCount); // Récupérer tous les genres
-    const dataValues = Object.values(genreCount); // Nombre d'occurrences pour chaque genre
+    const labels = Object.keys(genreCount); 
+    const dataValues = Object.values(genreCount); 
     const backgroundColors = [
         "#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff", "#ff9f40",
         "#ffb3e6", "#66b3ff", "#b3e6b3", "#ff6666", "#c2c2f0", "#ffb366"
-    ]; // Ajout de couleurs supplémentaires pour plus de genres
+    ]; 
 
     new Chart(document.getElementById("genresChart").getContext("2d"), {
-        type: "pie", // Type de graphique
+        type: "pie", 
         data: {
             labels: labels,
             datasets: [{
@@ -67,9 +66,8 @@ async function fetchPlaylist() {
     data.forEach(entry => {
         const tracks = entry.album?.tracks || [];
         const artistName = entry.album?.artists?.[0]?.name || "Inconnu";
-        const genre = genreMap[artistName]; // Genre récupéré depuis le genreMap
+        const genre = genreMap[artistName]; 
 
-        // Comptabilisation des morceaux pour chaque artiste
         if (genre) { // On ne comptabilise que les genres définis
             artistCount[artistName] = (artistCount[artistName] || 0) + tracks.length;
         }
