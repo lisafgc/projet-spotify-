@@ -4,19 +4,73 @@ async function fetchPlaylist() {
   
     const tbody = document.getElementById("playlist-table");
     const artistCount = {};
-    const genreCount = {};
     let index = 1;
   
   
     const genreMap = {
-      "Måneskin": "Rock",
-      "Bad Bunny": "Reggaeton",
-      "Tom Morello": "Rock",
-      "Ed Sheeran": "Pop",
-      "The Weeknd": "Pop",
-      "Omar Courtz": "Reggaeton"
-  
+        "Djo": "Rock",
+        "Dorado Schmitt": "Jazz",
+        "Montell Fish": "R&B",
+        "David Kushner": "Pop",
+        "Luidji": "Rap",
+        "Gehen": "Hardcore Punk",
+        "Post Malone": "Hip-Hop",
+        "Teddy Swims": "Soul",
+        "DJ Gummy Bear": "Techno",
+        "Julien Doré": "Chanson Française",
+        "Emile Mosseri": "Film Score",
+        "Jungle": "Funk",
+        "Billie Eilish": "Electropop",  
+        "Hozier": "Folk",
     };
+    
+  
+  const artists = [
+    "Måneskin", "Bad Bunny", "Tom Morello", "Ed Sheeran", "The Weeknd",
+    "Omar Courtz", "Imagine Dragons", "Shakira", "Beethoven", "Drake",
+    "Eminem", "Nirvana", "Dua Lipa", "Inconnu 1", "Inconnu 2"
+  ];
+  
+  const genreCount = {};
+  artists.forEach(name => {
+    const genre = genreMap[name] || "Inconnu";
+    genreCount[genre] = (genreCount[genre] || 0) + 1;
+  });
+  
+  const sortedGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]);
+  const topGenres = sortedGenres.slice(0, 5);
+  const autresTotal = sortedGenres.slice(5).reduce((acc, [_, val]) => acc + val, 0);
+  if (autresTotal > 0) {
+    topGenres.push(["Autre", autresTotal]);
+  }
+  
+  const labels = topGenres.map(e => e[0]);
+  const dataValues = topGenres.map(e => e[1]);
+  const backgroundColors = [
+    "#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff", "#ff9f40"
+  ];
+  
+  new Chart(document.getElementById("genresChart").getContext("2d"), {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Genres musicaux",
+        data: dataValues,
+        backgroundColor: backgroundColors
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom" },
+        title: {
+          display: true,
+          text: "Répartition des genres musicaux"
+        }
+      }
+    }
+  });  
   
     data.forEach(entry => {
       const tracks = entry.album?.tracks || [];
