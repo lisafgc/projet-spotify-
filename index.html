@@ -53,7 +53,7 @@
               <th>Titre</th>
               <th>Artiste</th>
               <th>Durée</th>
-              <th>Spotify</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="playlist-table">
@@ -63,6 +63,9 @@
     </section>
   </main>
 
+  <div id="tracks-container"></div>
+
+
   <footer class="text-center text-muted py-4 mt-5">
     <small>Projet Spotify by Lisa Figeac | Chart.js + Bootstrap</small>
   </footer>
@@ -70,5 +73,44 @@
   <script src="script/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="tracks.js"></script>
+
+<!-- Détails -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="detailsModalLabel">Détails du morceau</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body d-flex gap-4 flex-wrap">
+        <img id="modal-cover" src="" alt="Couverture" class="rounded shadow" style="width: 200px; height: 200px; object-fit: cover;">
+        <div class="flex-grow-1">
+          <h4 id="modal-title" class="mb-2"></h4>
+          <audio id="modal-audio" controls class="w-100 mb-3"></audio>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Durée :</strong> <span id="modal-duration"></span></li>
+            <li class="list-group-item"><strong>Popularité :</strong>
+              <div class="progress mt-1">
+                <div id="modal-popularity" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+              </div>
+            </li>
+            <li class="list-group-item"><strong>Date de sortie :</strong> <span id="modal-release"></span></li>
+            <li class="list-group-item"><strong>N° de piste :</strong> <span id="modal-track-number"></span></li>
+            <li class="list-group-item"><strong>Explicit :</strong> <span id="modal-explicit"></span></li>
+            <li class="list-group-item"><strong>Artistes :</strong> <span id="modal-artists"></span></li>
+            <li class="list-group-item"><strong>Genres :</strong> <span id="modal-genres"></span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <a id="modal-spotify" href="#" target="_blank" class="btn btn-success">Écouter sur Spotify</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
