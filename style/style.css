@@ -9,3 +9,13 @@ body {
   table {
     background-color: #ffffff;
   }
+
+  .album-card {
+    transition: transform 0.2s ease;
+  }
+  
+  .album-card:hover {
+    transform: scale(1.02);
+  }
+
+  

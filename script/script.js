@@ -26,6 +26,51 @@ async function fetchPlaylist() {
     "Jungle": "Funk",
     "Autre": "Autre",
   };
+
+  // === 🔽 Albums populaires ===
+const albumMap = new Map();
+
+data.forEach(entry => {
+  const album = entry.album;
+  if (!album || !album.name || !album.images?.[0]?.url) return;
+
+  const artistName = album.artists?.[0]?.name || "Inconnu";
+  const albumName = album.name;
+  const imageUrl = album.images[0].url;
+  const spotifyUrl = album.external_urls?.spotify || "#";
+  const popularity = album.popularity || 0;
+
+  const key = albumName + artistName;
+  if (!albumMap.has(key)) {
+    albumMap.set(key, { albumName, artistName, imageUrl, spotifyUrl, popularity });
+  }
+});
+
+// Trie les albums par popularité
+const topAlbums = Array.from(albumMap.values())
+  .sort((a, b) => b.popularity - a.popularity)
+  .slice(0, 12); // Top 12 albums
+
+const albumContainer = document.getElementById("popular-albums");
+topAlbums.forEach(album => {
+  const col = document.createElement("div");
+  col.className = "col";
+  col.innerHTML = `
+    <div class="card album-card h-100 shadow-sm">
+      <img src="${album.imageUrl}" class="card-img-top" alt="${album.albumName}">
+      <div class="card-body">
+        <h5 class="card-title">${album.albumName}</h5>
+        <p class="card-text text-muted">${album.artistName}</p>
+      </div>
+      <div class="card-footer bg-transparent border-top-0 text-end">
+        <a href="${album.spotifyUrl}" target="_blank" class="btn btn-sm btn-success">Voir sur Spotify</a>
+      </div>
+    </div>
+  `;
+  albumContainer.appendChild(col);
+});
+
+
   const genreCount = {};
   let index = 1;
 
