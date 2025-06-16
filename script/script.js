@@ -274,3 +274,138 @@ const dataTrackValue = JSON.stringify({
 // Puis tu l’utilises dans ton HTML comme ça (par exemple avec React ou template literal) :
 const html = `<div data-track='${dataTrackValue}'></div>`;
 
+
+
+
+const tracks = [
+  {
+    name: "Blinding Lights",
+    artistName: "The Weeknd",
+    duration: 200,
+    popularity: 95,
+    explicit: false,
+    genres: ["Pop", "R&B"],
+    album: {
+      name: "After Hours",
+      release_date: "2019-11-29",
+      images: [
+        { url: "https://i.scdn.co/image/ab67616d00001e022dd824fad0b1699679f8abaa" }
+      ]
+    },
+    external_urls: {
+      spotify: "https://open.spotify.com/track/example"
+    },
+    previewUrl: "https://p.scdn.co/mp3-preview/example",
+    artists: [
+      {
+        name: "The Weeknd",
+        popularity: 98,
+        followers: 45000000
+      }
+    ]
+  }
+];
+
+// Sélectionne le container dans la page
+const container = document.getElementById("tracks-container");
+
+// Fonction pour créer la carte d'un morceau
+function createTrackCard(track) {
+  return `
+    <div class="track-card" style="border:1px solid #ccc; margin:10px; padding:10px;">
+      <img src="${track.album.images[0]?.url || ''}" alt="Cover" style="width:100px; height:100px; object-fit:cover;">
+      <h3>${track.name}</h3>
+      <p><strong>Artiste :</strong> ${track.artistName}</p>
+      <p><strong>Durée :</strong> ${Math.floor(track.duration / 60)}:${String(track.duration % 60).padStart(2, '0')}</p>
+      <p><strong>Popularité :</strong> ${track.popularity}</p>
+      <p><strong>Explicite :</strong> ${track.explicit ? "Oui" : "Non"}</p>
+      <p><strong>Genres :</strong> ${track.genres.join(', ')}</p>
+      <p><strong>Date de sortie :</strong> ${track.album.release_date}</p>
+      <p><a href="${track.external_urls.spotify}" target="_blank">Écouter sur Spotify</a></p>
+    </div>
+  `;
+}
+
+container.innerHTML = tracks.map(createTrackCard).join('');
+
+// Remplir le tableau
+const playlistTable = document.getElementById("playlist-table");
+tracks.forEach((track, index) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${index + 1}</td>
+    <td>${track.name}</td>
+    <td>${track.artistName}</td>
+    <td>${Math.floor(track.duration / 60)}:${String(track.duration % 60).padStart(2, '0')}</td>
+    <td>
+      <button class="btn btn-sm btn-outline-primary" data-index="${index}" data-bs-toggle="modal" data-bs-target="#detailsModal">Détails</button>
+    </td>
+  `;
+  playlistTable.appendChild(row);
+});
+
+// Modale détails
+const detailsModal = document.getElementById("detailsModal");
+detailsModal.addEventListener("show.bs.modal", (event) => {
+  const button = event.relatedTarget;
+  const index = button.getAttribute("data-index");
+  const track = tracks[index];
+
+  document.getElementById("modal-cover").src = track.album.images[0]?.url || "";
+  document.getElementById("modal-title").textContent = track.name;
+  document.getElementById("modal-duration").textContent = `${Math.floor(track.duration / 60)}:${String(track.duration % 60).padStart(2, '0')}`;
+  document.getElementById("modal-popularity").style.width = `${track.popularity}%`;
+  document.getElementById("modal-popularity").textContent = `${track.popularity}%`;
+  document.getElementById("modal-release").textContent = track.album.release_date || "N/A";
+  document.getElementById("modal-track-number").textContent = track.trackNumber || "N/A"; // trackNumber non défini dans les données
+  document.getElementById("modal-explicit").textContent = track.explicit ? "Oui" : "Non";
+  document.getElementById("modal-audio").src = track.previewUrl || "";
+  document.getElementById("modal-spotify").href = track.external_urls.spotify || "#";
+
+  const artistsHtml = track.artists.map(artist => `
+    <div><strong>${artist.name}</strong><br>Popularité : ${artist.popularity} | Followers : ${artist.followers.toLocaleString()}</div>
+  `).join("<hr>");
+  document.getElementById("modal-artists").innerHTML = artistsHtml;
+
+  document.getElementById("modal-genres").innerHTML = track.genres.map(g => `
+    <span class="badge bg-secondary me-1">${g}</span>
+  `).join("");
+});
+
+// Graphiques Chart.js
+document.addEventListener("DOMContentLoaded", function () {
+  const ctxArtists = document.getElementById("topArtistsChart").getContext("2d");
+  new Chart(ctxArtists, {
+    type: "bar",
+    data: {
+      labels: ["The Weeknd", "Drake", "Adele", "Beyoncé", "Bad Bunny"],
+      datasets: [{
+        label: "Popularité",
+        data: [98, 95, 92, 90, 88],
+        backgroundColor: "#4e73df"
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 } }
+    }
+  });
+
+  const ctxGenres = document.getElementById("genresChart").getContext("2d");
+  new Chart(ctxGenres, {
+    type: "pie",
+    data: {
+      labels: ["Pop", "Hip-Hop", "R&B", "Rock", "Electro"],
+      datasets: [{
+        label: "Genres",
+        data: [30, 25, 20, 15, 10],
+        backgroundColor: ["#f6c23e", "#e74a3b", "#36b9cc", "#1cc88a", "#858796"]
+      }]
+    },
+    options: { responsive: true }
+  });
+});
+
+
+container.innerHTML = tracks.map(createTrackCard).join('');

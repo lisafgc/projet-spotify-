@@ -17,5 +17,18 @@ body {
   .album-card:hover {
     transform: scale(1.02);
   }
-
+  #detailsModal .progress {
+    height: 20px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+  }
+  
+  #detailsModal .progress-bar {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  
+  #detailsModal .badge {
+    font-size: 0.85rem;
+  }
   
